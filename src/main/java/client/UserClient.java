@@ -3,7 +3,6 @@ package client;
 import config.*;
 import emity.*;
 import org.apache.commons.lang3.StringUtils;
-import utils.*;
 
 import io.restassured.response.ValidatableResponse;
 
@@ -48,7 +47,7 @@ public class UserClient extends Config {
         User changeUser = new User(newEmail, PASSWORD_TEST, NAME_TEST);
         return given()
                 .spec(getBaseSpec())
-                .header("Authorization", "Bearer " + StringUtils.substringAfter(accessToken, " "))
+                .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
                 .body(changeUser)
                 .patch(API_INFO)
                 .then();
@@ -80,7 +79,7 @@ public class UserClient extends Config {
 
         given()
                 .spec(getBaseSpec())
-                .header("Authorization", "Bearer " + StringUtils.substringAfter(accessToken, " "))
+                .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
                 .when()
                 .delete(API_INFO);
     }

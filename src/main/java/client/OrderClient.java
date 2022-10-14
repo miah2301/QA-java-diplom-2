@@ -1,11 +1,8 @@
 package client;
 
-import config.*;
 import emity.*;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
-import utils.*;
-import client.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -26,7 +23,7 @@ public class OrderClient extends UserClient {
 
         return given()
                 .spec(getBaseSpec())
-                .header("Authorization", "Bearer " + StringUtils.substringAfter(accessToken, " "))
+                .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
                 .get(API_ORDERS)
                 .then();
     }

@@ -3,10 +3,7 @@ package config;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 
-import config.*;
-import emity.*;
 import utils.*;
-import client.*;
 
 import static io.restassured.http.ContentType.JSON;
 
