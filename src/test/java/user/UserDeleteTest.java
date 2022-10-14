@@ -20,6 +20,7 @@ public class UserDeleteTest extends UserClient {
     public void deleteUser(){
         ValidatableResponse response = loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
         String accessToken = response.extract().path("accessToken");
+
         deleteUser(StringUtils.substringAfter(accessToken, " "));
     }
 }

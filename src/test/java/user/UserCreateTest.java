@@ -21,6 +21,19 @@ public class UserCreateTest extends UserClient {
     }
 
     @Test
+    @DisplayName("User create by random credentials")
+    public void userRandomCreate(){
+        ValidatableResponse randomUser = createUser(
+                User.getRandomUser()
+        );
+        randomUser
+                .assertThat()
+                .statusCode(200)
+                .body("success", equalTo(true));
+    }
+
+    @Test
+    @DisplayName("User create by valid credentials")
     public void userCreateByValidCredentials(){
         createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
         ValidatableResponse response = createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
@@ -67,4 +80,5 @@ public class UserCreateTest extends UserClient {
                 .body("message", equalTo("Email, password and name are required fields"))
                 .log().all();
     }
+
 }
