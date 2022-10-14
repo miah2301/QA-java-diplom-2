@@ -1,22 +1,14 @@
 package orders;
 
 import client.OrderClient;
-import client.UserClient;
 import emity.User;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 
 public class GetOrdersTest extends OrderClient{
-
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "https://stellarburgers.nomoreparties.site/";
-    }
 
     @DisplayName("Get order without authorization user")
     @Test

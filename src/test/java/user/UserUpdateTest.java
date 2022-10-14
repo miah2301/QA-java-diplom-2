@@ -3,21 +3,13 @@ package user;
 import client.UserClient;
 import emity.User;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
-import org.junit.Before;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class UserUpdateTest extends UserClient {
     private static final String expectedNewEmail = "mikinewemailtest088011@yandex.ru";
-
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "https://stellarburgers.nomoreparties.site/";
-    }
 
     @Test
     @DisplayName("Update user by authorization")

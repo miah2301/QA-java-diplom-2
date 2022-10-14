@@ -14,9 +14,7 @@ public class OrderClient extends UserClient {
     public ValidatableResponse getOrderResponse(Order order) {
         return given()
                 .spec(getBaseSpec())
-                .and()
                 .body(order)
-                .when()
                 .post(API_ORDERS)
                 .then();
     }
@@ -29,7 +27,6 @@ public class OrderClient extends UserClient {
         return given()
                 .spec(getBaseSpec())
                 .header("Authorization", "Bearer " + StringUtils.substringAfter(accessToken, " "))
-                .when()
                 .get(API_ORDERS)
                 .then();
     }
@@ -37,7 +34,6 @@ public class OrderClient extends UserClient {
     public ValidatableResponse getAllOrdersLogoutUser() {
         return given()
                 .spec(getBaseSpec())
-                .when()
                 .get(API_ORDERS)
                 .then();
     }

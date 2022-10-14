@@ -2,21 +2,13 @@ package user;
 
 import client.UserClient;
 import emity.*;
-import utils.Constants;
-import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 
 public class UserLoginTest extends UserClient {
-
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "https://stellarburgers.nomoreparties.site/";
-    }
 
     @Test
     public void userLoginByValidCredentials(){

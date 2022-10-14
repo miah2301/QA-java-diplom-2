@@ -25,8 +25,7 @@ public class UserClient extends Config {
         given()
                 .spec(getBaseSpec())
                 .auth().oauth2(accessToken)
-                .log().all()
-                .delete(Constants.API_INFO)
+                .delete(API_INFO)
                 .then()
                 .log().all();
     }
@@ -34,10 +33,8 @@ public class UserClient extends Config {
     public ValidatableResponse loginUser(Login login){
         return given()
                 .spec(getBaseSpec())
-                .and()
                 .body(login)
-                .when()
-                .post(Constants.API_AUTHORIZATION_USER)
+                .post(API_AUTHORIZATION_USER)
                 .then()
                 .log().all();
     }
@@ -51,10 +48,8 @@ public class UserClient extends Config {
         User changeUser = new User(newEmail, PASSWORD_TEST, NAME_TEST);
         return given()
                 .spec(getBaseSpec())
-                .and()
                 .header("Authorization", "Bearer " + StringUtils.substringAfter(accessToken, " "))
                 .body(changeUser)
-                .when()
                 .patch(API_INFO)
                 .then();
     }
@@ -65,9 +60,7 @@ public class UserClient extends Config {
         User changeUser = new User(newEmail, PASSWORD_TEST, NAME_TEST);
         return given()
                 .spec(getBaseSpec())
-                .and()
                 .body(changeUser)
-                .when()
                 .patch(API_INFO)
                 .then();
     }
@@ -86,8 +79,8 @@ public class UserClient extends Config {
         String accessToken = getToken.extract().path("accessToken");
 
         given()
+                .spec(getBaseSpec())
                 .header("Authorization", "Bearer " + StringUtils.substringAfter(accessToken, " "))
-                .header("Content-type", "application/json")
                 .when()
                 .delete(API_INFO);
     }
