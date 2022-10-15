@@ -1,7 +1,7 @@
 package utils;
 
 public class Constants {
-    protected static final String EMAIL_TEST = "mihailmieke12345@yandex.ru";
+    protected static final String EMAIL_TEST = "mihail777mieke33@yandex.ru";
     protected static final String PASSWORD_TEST = "password_test";
     protected static final String NAME_TEST = "Username_test";
 

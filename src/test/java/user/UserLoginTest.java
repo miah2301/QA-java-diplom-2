@@ -13,6 +13,7 @@ public class UserLoginTest extends UserClient {
     @Test
     public void userLoginByValidCredentials(){
         createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+
         ValidatableResponse response = loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));
             response
                     .assertThat()
@@ -21,8 +22,7 @@ public class UserLoginTest extends UserClient {
                     .body("success", equalTo(true))
                     .log().all();
 
-        String accessToken = response.extract().path("accessToken");
-        deleteUser(StringUtils.substringAfter(accessToken, " "));
+        cleanUser();
     }
 
     @Test

@@ -15,6 +15,7 @@ public class UserUpdateTest extends UserClient {
     @DisplayName("Update user by authorization")
     public void updateUserByAuthorization() {
         createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+
         ValidatableResponse response = updateUserLogin();
         response
                 .assertThat()
@@ -29,6 +30,7 @@ public class UserUpdateTest extends UserClient {
     @DisplayName("Update user without authorization")
     public void updateUserWithoutAuthorization() {
         createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+
         ValidatableResponse response = updateUserLogout();
         response
                 .assertThat()

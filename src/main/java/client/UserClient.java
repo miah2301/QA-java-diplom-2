@@ -2,6 +2,7 @@ package client;
 
 import config.*;
 import emity.*;
+import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import io.restassured.response.ValidatableResponse;
@@ -20,8 +21,8 @@ public class UserClient extends Config {
                 .log().all();
     }
 
-    public void deleteUser(String accessToken){
-        given()
+    public ValidatableResponse deleteUser(String accessToken){
+        return given()
                 .spec(getBaseSpec())
                 .auth().oauth2(accessToken)
                 .delete(API_INFO)
