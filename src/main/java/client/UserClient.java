@@ -21,8 +21,8 @@ public class UserClient extends Config {
                 .log().all();
     }
 
-    public ValidatableResponse deleteUser(String accessToken){
-        return given()
+    public void deleteUser(String accessToken){
+          given()
                 .spec(getBaseSpec())
                 .auth().oauth2(accessToken)
                 .delete(API_INFO)
@@ -40,7 +40,7 @@ public class UserClient extends Config {
     }
 
     public ValidatableResponse updateUserLogin(){
-        String newEmail = "mikinewemailtest088011@yandex.ru";
+        String newEmail = "updatetestemail23033@yandex.ru";
 
         ValidatableResponse getToken = loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));
         String accessToken = getToken.extract().path("accessToken");
@@ -51,18 +51,20 @@ public class UserClient extends Config {
                 .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
                 .body(changeUser)
                 .patch(API_INFO)
-                .then();
+                .then()
+                .log().all();
     }
 
     public ValidatableResponse updateUserLogout(){
-        String newEmail = "mikinewemailtest088011@yandex.ru";
+        String newEmail = "updatetestemail23033@yandex.ru";
 
         User changeUser = new User(newEmail, PASSWORD_TEST, NAME_TEST);
         return given()
                 .spec(getBaseSpec())
                 .body(changeUser)
                 .patch(API_INFO)
-                .then();
+                .then()
+                .log().all();
     }
 
     public void cleanUser(){
@@ -73,7 +75,7 @@ public class UserClient extends Config {
     }
 
     public void cleanUpdaterUser(){
-        String expectedNewEmail = "mikinewemailtest088011@yandex.ru";
+        String expectedNewEmail = "updatetestemail23033@yandex.ru";
 
         ValidatableResponse getToken = loginUser(new Login(expectedNewEmail,PASSWORD_TEST));
         String accessToken = getToken.extract().path("accessToken");

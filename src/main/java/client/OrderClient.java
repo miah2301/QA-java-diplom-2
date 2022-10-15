@@ -13,7 +13,8 @@ public class OrderClient extends UserClient {
                 .spec(getBaseSpec())
                 .body(order)
                 .post(API_ORDERS)
-                .then();
+                .then()
+                .log().all();
     }
 
     public ValidatableResponse getAllOrdersLoginUser() {
@@ -25,13 +26,15 @@ public class OrderClient extends UserClient {
                 .spec(getBaseSpec())
                 .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
                 .get(API_ORDERS)
-                .then();
+                .then()
+                .log().all();
     }
 
     public ValidatableResponse getAllOrdersLogoutUser() {
         return given()
                 .spec(getBaseSpec())
                 .get(API_ORDERS)
-                .then();
+                .then()
+                .log().all();
     }
 }

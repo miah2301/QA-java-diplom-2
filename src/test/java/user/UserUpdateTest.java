@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.equalTo;
 
 public class UserUpdateTest extends UserClient {
-    private static final String expectedNewEmail = "mikinewemailtest088011@yandex.ru";
+    private static final String expectedNewEmail = "updatetestemail23033@yandex.ru";
 
     @Test
     @DisplayName("Update user by authorization")
@@ -30,7 +30,6 @@ public class UserUpdateTest extends UserClient {
     @DisplayName("Update user without authorization")
     public void updateUserWithoutAuthorization() {
         createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
-
         ValidatableResponse response = updateUserLogout();
         response
                 .assertThat()
