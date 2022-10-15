@@ -10,8 +10,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class GetOrdersTest extends OrderClient{
 
-    @DisplayName("Get order without authorization user")
     @Test
+    @DisplayName("Get order without authorization user")
     public void getOrderWithoutAuthorizationUser(){
         ValidatableResponse allOrders = getAllOrdersLogoutUser();
         allOrders
@@ -22,8 +22,8 @@ public class GetOrdersTest extends OrderClient{
                 .log().all();
     }
 
-    @DisplayName("Get order authorization user")
     @Test
+    @DisplayName("Get order authorization user")
     public void getAllOrdersAuthUserTest(){
         createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
 

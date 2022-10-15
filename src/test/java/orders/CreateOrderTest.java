@@ -3,6 +3,7 @@ package orders;
 import client.OrderClient;
 import client.UserClient;
 import emity.Order;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Test;
 
@@ -14,6 +15,7 @@ public class CreateOrderTest extends OrderClient {
     private final UserClient userClient = new UserClient();
 
     @Test
+    @DisplayName("Create order without authorization")
     public void createOrderWithoutAuth(){
         ValidatableResponse response = getOrderResponse(
                 new Order(List.of(validHashOne, validHashTwo))
@@ -26,6 +28,7 @@ public class CreateOrderTest extends OrderClient {
     }
 
     @Test
+    @DisplayName("Create order without authorization and not valid hash")
     public void createOrderWithoutAuthAndNotValidHash(){
         ValidatableResponse response = getOrderResponse(
                 new Order(List.of("notValidHash", "lol"))
@@ -37,6 +40,7 @@ public class CreateOrderTest extends OrderClient {
     }
 
     @Test
+    @DisplayName("Create order without authorization and null hash")
     public void createOrderWithoutAuthAndNullHash(){
         ValidatableResponse response = getOrderResponse(
                 new Order(null)
@@ -48,6 +52,7 @@ public class CreateOrderTest extends OrderClient {
     }
 
     @Test
+    @DisplayName("Create order by authorization")
     public void createOrderByAuth(){
         userClient.createAndLoginUser();
 
@@ -64,6 +69,7 @@ public class CreateOrderTest extends OrderClient {
     }
 
     @Test
+    @DisplayName("Create order by authorization and not valid hash")
     public void createOrderByAuthAndNotValidHash(){
         userClient.createAndLoginUser();
 
@@ -79,6 +85,7 @@ public class CreateOrderTest extends OrderClient {
     }
 
     @Test
+    @DisplayName("Create order by authorization and null hash")
     public void createOrderByAuthAndNullHash(){
         userClient.createAndLoginUser();
 
