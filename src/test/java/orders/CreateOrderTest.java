@@ -3,7 +3,6 @@ package orders;
 import client.OrderClient;
 import client.UserClient;
 import emity.Order;
-import emity.User;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Test;
