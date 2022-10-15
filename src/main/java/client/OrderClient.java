@@ -17,6 +17,21 @@ public class OrderClient extends UserClient {
                 .log().all();
     }
 
+    public ValidatableResponse getOrderResponseLogin(Order order) {
+        createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+
+        ValidatableResponse getToken = loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));
+        String accessToken = getToken.extract().path("accessToken");
+
+        return given()
+                .spec(getBaseSpec())
+                .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
+                .body(order)
+                .post(API_ORDERS)
+                .then()
+                .log().all();
+    }
+
     public ValidatableResponse getAllOrdersLoginUser() {
 
         ValidatableResponse getToken = loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));

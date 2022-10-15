@@ -3,6 +3,7 @@ package orders;
 import client.OrderClient;
 import client.UserClient;
 import emity.Order;
+import emity.User;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Test;
@@ -54,9 +55,7 @@ public class CreateOrderTest extends OrderClient {
     @Test
     @DisplayName("Create order by authorization")
     public void createOrderByAuth(){
-        userClient.createAndLoginUser();
-
-        ValidatableResponse response = getOrderResponse(
+        ValidatableResponse response = getOrderResponseLogin(
                 new Order(List.of(validHashOne, validHashTwo))
         );
         response
@@ -71,9 +70,7 @@ public class CreateOrderTest extends OrderClient {
     @Test
     @DisplayName("Create order by authorization and not valid hash")
     public void createOrderByAuthAndNotValidHash(){
-        userClient.createAndLoginUser();
-
-        ValidatableResponse response = getOrderResponse(
+        ValidatableResponse response = getOrderResponseLogin(
                 new Order(List.of("notValidHash", "lol"))
         );
         response
@@ -87,9 +84,7 @@ public class CreateOrderTest extends OrderClient {
     @Test
     @DisplayName("Create order by authorization and null hash")
     public void createOrderByAuthAndNullHash(){
-        userClient.createAndLoginUser();
-
-        ValidatableResponse response = getOrderResponse(
+        ValidatableResponse response = getOrderResponseLogin(
                 new Order(null)
         );
         response
