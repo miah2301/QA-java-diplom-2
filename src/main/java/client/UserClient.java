@@ -89,6 +89,7 @@ public class UserClient extends Config {
 
     public void createAndLoginUser(){
         createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
-        loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));
+        loginUser(new Login(EMAIL_TEST,PASSWORD_TEST))
+                .log().all();
     }
 }
