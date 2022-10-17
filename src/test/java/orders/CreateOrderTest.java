@@ -2,22 +2,34 @@ package orders;
 
 import client.OrderClient;
 import client.UserClient;
+import emity.Login;
 import emity.Order;
+import emity.User;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import utils.Constants;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class CreateOrderTest extends OrderClient {
+public class CreateOrderTest extends Constants {
     private final UserClient userClient = new UserClient();
+    private final OrderClient orderClient = new OrderClient();
+
+    @Before
+    public void setUp(){
+        userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+    }
 
     @Test
     @DisplayName("Create order without authorization")
     public void createOrderWithoutAuth(){
-        ValidatableResponse response = getOrderResponse(
+        ValidatableResponse response = orderClient.getOrderResponse(
                 new Order(List.of(validHashOne, validHashTwo))
         );
         response
@@ -30,7 +42,7 @@ public class CreateOrderTest extends OrderClient {
     @Test
     @DisplayName("Create order without authorization and not valid hash")
     public void createOrderWithoutAuthAndNotValidHash(){
-        ValidatableResponse response = getOrderResponse(
+        ValidatableResponse response = orderClient.getOrderResponse(
                 new Order(List.of("notValidHash", "lol"))
         );
         response
@@ -42,7 +54,7 @@ public class CreateOrderTest extends OrderClient {
     @Test
     @DisplayName("Create order without authorization and null hash")
     public void createOrderWithoutAuthAndNullHash(){
-        ValidatableResponse response = getOrderResponse(
+        ValidatableResponse response = orderClient.getOrderResponse(
                 new Order(null)
         );
         response
@@ -54,44 +66,49 @@ public class CreateOrderTest extends OrderClient {
     @Test
     @DisplayName("Create order by authorization")
     public void createOrderByAuth(){
-        ValidatableResponse response = getOrderResponseLogin(
-                new Order(List.of(validHashOne, validHashTwo))
-        );
+        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
+        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+
+        ValidatableResponse response = orderClient.getOrderResponseLogin(
+                new Order(List.of(validHashOne, validHashTwo)), accessToken);
         response
                 .assertThat()
                 .statusCode(200)
                 .body("success", equalTo(true))
                 .log().all();
-
-        userClient.cleanUser();
     }
 
     @Test
     @DisplayName("Create order by authorization and not valid hash")
     public void createOrderByAuthAndNotValidHash(){
-        ValidatableResponse response = getOrderResponseLogin(
-                new Order(List.of("notValidHash", "lol"))
-        );
+        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
+        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+
+        ValidatableResponse response = orderClient.getOrderResponseLogin(
+                new Order(List.of("notValidHash", "lol")), accessToken);
         response
                 .assertThat()
                 .statusCode(500)
                 .log().all();
-
-        userClient.cleanUser();
     }
 
     @Test
     @DisplayName("Create order by authorization and null hash")
     public void createOrderByAuthAndNullHash(){
-        ValidatableResponse response = getOrderResponseLogin(
-                new Order(null)
-        );
+        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
+        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+
+        ValidatableResponse response = orderClient.getOrderResponseLogin(
+                new Order(null), accessToken);
         response
                 .assertThat()
                 .statusCode(400)
                 .body("success", equalTo(false))
                 .log().all();
+    }
 
+    @After
+    public void tearDown(){
         userClient.cleanUser();
     }
 }

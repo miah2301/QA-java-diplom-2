@@ -1,6 +1,8 @@
 package utils;
 
-public class Constants {
+import config.Config;
+
+public class Constants extends Config {
     protected static final String EMAIL_TEST = "mihail777mieke334@yandex.ru";
     protected static final String PASSWORD_TEST = "password_test";
     protected static final String NAME_TEST = "Username_test";

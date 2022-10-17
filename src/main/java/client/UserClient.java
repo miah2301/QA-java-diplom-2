@@ -2,7 +2,7 @@ package client;
 
 import config.*;
 import emity.*;
-import io.restassured.response.Response;
+import utils.Constants;
 import org.apache.commons.lang3.StringUtils;
 
 import io.restassured.response.ValidatableResponse;
@@ -10,7 +10,7 @@ import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
 
-public class UserClient extends Config {
+public class UserClient extends Constants {
 
     public ValidatableResponse createUser(User user) {
         return given()

@@ -1,19 +1,32 @@
 package orders;
 
 import client.OrderClient;
+import client.UserClient;
+import emity.Login;
+import emity.Order;
 import emity.User;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import utils.Constants;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class GetOrdersTest extends OrderClient{
+public class GetOrdersTest extends Constants {
+    private final UserClient userClient = new UserClient();
+    private final OrderClient orderClient = new OrderClient();
+    @Before
+    public void setUp(){
+        userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+    }
 
     @Test
     @DisplayName("Get order without authorization user")
     public void getOrderWithoutAuthorizationUser(){
-        ValidatableResponse allOrders = getAllOrdersLogoutUser();
+        ValidatableResponse allOrders = orderClient.getAllOrdersLogoutUser();
         allOrders
                 .assertThat()
                 .statusCode(401)
@@ -25,15 +38,19 @@ public class GetOrdersTest extends OrderClient{
     @Test
     @DisplayName("Get order authorization user")
     public void getAllOrdersAuthUserTest(){
-        createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
+        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
-        ValidatableResponse allOrders = getAllOrdersLoginUser();
+        ValidatableResponse allOrders = orderClient.getAllOrdersLoginUser(accessToken);
         allOrders
                 .assertThat()
                 .statusCode(200)
                 .body("success", equalTo(true))
                 .log().all();
+    }
 
-        cleanUser();
+    @After
+    public void tearDown(){
+        userClient.cleanUser();
     }
 }
