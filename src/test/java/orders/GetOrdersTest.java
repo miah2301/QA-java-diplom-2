@@ -3,13 +3,10 @@ package orders;
 import client.OrderClient;
 import client.UserClient;
 import emity.Login;
-import emity.Order;
 import emity.User;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import utils.Constants;
 
@@ -18,8 +15,6 @@ import static org.hamcrest.Matchers.equalTo;
 public class GetOrdersTest extends Constants {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
-    User user;
-    String accessToken;
 
     @Test
     @DisplayName("Get order without authorization user")
@@ -36,11 +31,11 @@ public class GetOrdersTest extends Constants {
     @Test
     @DisplayName("Get order authorization user")
     public void getAllOrdersAuthUserTest(){
-        user = User.getRandomUser();
+        User user = User.getRandomUser();
         userClient.createUser(user);
 
         ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse allOrders = orderClient.getAllOrdersLoginUser(accessToken);
         allOrders

@@ -21,10 +21,12 @@ public class CreateOrderTest extends Constants {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
     private User user;
+    private String accessToken;
 
     @Before
     public void setUp(){
         user = User.getRandomUser();
+        userClient.createUser(user);
     }
 
     @Test
@@ -68,7 +70,7 @@ public class CreateOrderTest extends Constants {
     @DisplayName("Create order by authorization")
     public void createOrderByAuth(){
         ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse response = orderClient.getOrderResponseLogin(
                 new Order(List.of(validHashOne, validHashTwo)), accessToken);
@@ -83,7 +85,7 @@ public class CreateOrderTest extends Constants {
     @DisplayName("Create order by authorization and not valid hash")
     public void createOrderByAuthAndNotValidHash(){
         ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse response = orderClient.getOrderResponseLogin(
                 new Order(List.of("notValidHash", "lol")), accessToken);
@@ -97,7 +99,7 @@ public class CreateOrderTest extends Constants {
     @DisplayName("Create order by authorization and null hash")
     public void createOrderByAuthAndNullHash(){
         ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse response = orderClient.getOrderResponseLogin(
                 new Order(null), accessToken);
@@ -110,6 +112,8 @@ public class CreateOrderTest extends Constants {
 
     @After
     public void tearDown(){
-        userClient.cleanUser();
+        if (accessToken != null) {
+            userClient.deleteUser(accessToken);
+        }
     }
 }
