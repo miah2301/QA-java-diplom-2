@@ -20,10 +20,11 @@ import static org.hamcrest.Matchers.equalTo;
 public class CreateOrderTest extends Constants {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
+    private User user;
 
     @Before
     public void setUp(){
-        userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+        user = User.getRandomUser();
     }
 
     @Test
@@ -66,7 +67,7 @@ public class CreateOrderTest extends Constants {
     @Test
     @DisplayName("Create order by authorization")
     public void createOrderByAuth(){
-        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
         String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse response = orderClient.getOrderResponseLogin(
@@ -81,7 +82,7 @@ public class CreateOrderTest extends Constants {
     @Test
     @DisplayName("Create order by authorization and not valid hash")
     public void createOrderByAuthAndNotValidHash(){
-        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
         String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse response = orderClient.getOrderResponseLogin(
@@ -95,7 +96,7 @@ public class CreateOrderTest extends Constants {
     @Test
     @DisplayName("Create order by authorization and null hash")
     public void createOrderByAuthAndNullHash(){
-        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
         String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse response = orderClient.getOrderResponseLogin(

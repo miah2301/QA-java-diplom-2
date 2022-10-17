@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class GetOrdersTest extends Constants {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
+
     @Before
     public void setUp(){
         userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));

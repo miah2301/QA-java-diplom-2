@@ -24,4 +24,8 @@ public class Login {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public static Login from(User user){
+        return new Login(user.getEmail(), user.getPassword());
+    }
 }
