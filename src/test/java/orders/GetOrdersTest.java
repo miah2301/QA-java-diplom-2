@@ -18,11 +18,8 @@ import static org.hamcrest.Matchers.equalTo;
 public class GetOrdersTest extends Constants {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
-
-    @Before
-    public void setUp(){
-        userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
-    }
+    User user;
+    String accessToken;
 
     @Test
     @DisplayName("Get order without authorization user")
@@ -39,8 +36,11 @@ public class GetOrdersTest extends Constants {
     @Test
     @DisplayName("Get order authorization user")
     public void getAllOrdersAuthUserTest(){
-        ValidatableResponse getToken = userClient.loginUser(new Login(EMAIL_TEST, PASSWORD_TEST));
-        String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+        user = User.getRandomUser();
+        userClient.createUser(user);
+
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse allOrders = orderClient.getAllOrdersLoginUser(accessToken);
         allOrders
@@ -48,10 +48,7 @@ public class GetOrdersTest extends Constants {
                 .statusCode(200)
                 .body("success", equalTo(true))
                 .log().all();
-    }
 
-    @After
-    public void tearDown(){
-        userClient.cleanUser();
+        userClient.deleteUser(accessToken);
     }
 }
