@@ -67,13 +67,6 @@ public class UserClient extends Constants {
                 .log().all();
     }
 
-    public void cleanUser(){
-        ValidatableResponse getToken = loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));
-        String accessToken = getToken.extract().path("accessToken");
-
-        deleteUser(StringUtils.substringAfter(accessToken, " "));
-    }
-
     public void cleanUpdaterUser(){
         String expectedNewEmail = "updatetestemail23033@yandex.ru";
 
@@ -85,11 +78,5 @@ public class UserClient extends Constants {
                 .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
                 .when()
                 .delete(API_INFO);
-    }
-
-    public void createAndLoginUser(){
-        createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
-        loginUser(new Login(EMAIL_TEST,PASSWORD_TEST))
-                .log().all();
     }
 }

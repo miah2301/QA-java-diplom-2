@@ -20,13 +20,15 @@ import static org.hamcrest.Matchers.equalTo;
 public class CreateOrderTest extends Constants {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
-    private User user;
     private String accessToken;
 
     @Before
     public void setUp(){
-        user = User.getRandomUser();
+        User user = User.getRandomUser();
         userClient.createUser(user);
+
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
     }
 
     @Test
@@ -69,8 +71,7 @@ public class CreateOrderTest extends Constants {
     @Test
     @DisplayName("Create order by authorization")
     public void createOrderByAuth(){
-        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+
 
         ValidatableResponse response = orderClient.getOrderResponseLogin(
                 new Order(List.of(validHashOne, validHashTwo)), accessToken);
@@ -84,9 +85,6 @@ public class CreateOrderTest extends Constants {
     @Test
     @DisplayName("Create order by authorization and not valid hash")
     public void createOrderByAuthAndNotValidHash(){
-        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
-
         ValidatableResponse response = orderClient.getOrderResponseLogin(
                 new Order(List.of("notValidHash", "lol")), accessToken);
         response
@@ -98,9 +96,6 @@ public class CreateOrderTest extends Constants {
     @Test
     @DisplayName("Create order by authorization and null hash")
     public void createOrderByAuthAndNullHash(){
-        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
-
         ValidatableResponse response = orderClient.getOrderResponseLogin(
                 new Order(null), accessToken);
         response

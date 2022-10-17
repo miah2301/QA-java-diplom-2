@@ -5,6 +5,7 @@ import com.github.javafaker.Code;
 import emity.*;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import utils.Constants;
 
@@ -17,9 +18,12 @@ public class UserLoginTest extends Constants {
     @Test
     @DisplayName("User logout by valid credentials")
     public void userLoginByValidCredentials(){
-        userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+        User user = User.getRandomUser();
+        userClient.createUser(user);
 
-        ValidatableResponse response = userClient.loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));
+        ValidatableResponse response = userClient.loginUser(Login.from(user));
+        String accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
+
             response
                     .assertThat()
                      .statusCode(200)
@@ -27,7 +31,7 @@ public class UserLoginTest extends Constants {
                     .body("success", equalTo(true))
                     .log().all();
 
-        userClient.cleanUser();
+        userClient.deleteUser(accessToken);
     }
 
     @Test

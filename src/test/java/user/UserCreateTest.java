@@ -1,11 +1,14 @@
 package user;
 
 import client.UserClient;
+import emity.Login;
 import emity.User;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import utils.Constants;
 
@@ -14,25 +17,40 @@ import static org.hamcrest.Matchers.equalTo;
 public class UserCreateTest extends Constants {
 
     UserClient userClient = new UserClient();
+    private String accessToken;
+    private User user;
+
+    @Before
+    public void setUp(){
+
+    }
 
     @Test
     @DisplayName("User create by random credentials")
     public void userRandomCreate(){
         ValidatableResponse randomUser = userClient.createUser(
-                User.getRandomUser()
-        );
+                User.getRandomUser());
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+
         randomUser
                 .assertThat()
                 .statusCode(200)
                 .body("success", equalTo(true));
+
+        userClient.deleteUser(accessToken);
     }
 
     @Test
     @DisplayName("User create by valid credentials")
     public void userCreateByValidCredentials(){
-        userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+        user = User.getRandomUser();
+        userClient.createUser(user);
 
-        ValidatableResponse response = userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,NAME_TEST));
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+
+        ValidatableResponse response = userClient.createUser(user);
         response
                 .assertThat()
                 .statusCode(403)
@@ -40,7 +58,7 @@ public class UserCreateTest extends Constants {
                 .body("message", equalTo("User already exists"))
                 .log().all();
 
-        userClient.cleanUser();
+        userClient.deleteUser(accessToken);
     }
 
     @Test
