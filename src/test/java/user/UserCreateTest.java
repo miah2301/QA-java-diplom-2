@@ -54,7 +54,6 @@ public class UserCreateTest extends Constants {
         accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
         ValidatableResponse response = userClient.createUser(user);
-        // ТУТ НАДО ДОДЕЛАТЬ
         response
                 .assertThat()
                 .statusCode(403)
