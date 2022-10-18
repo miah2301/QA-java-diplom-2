@@ -8,11 +8,10 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import utils.Constants;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class GetOrdersTest extends Constants {
+public class GetOrdersTest {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
 

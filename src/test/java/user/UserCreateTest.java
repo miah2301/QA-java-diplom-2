@@ -22,16 +22,20 @@ public class UserCreateTest extends Constants {
 
     @Before
     public void setUp(){
+        user = User.getRandomUser();
+        userClient.createUser(user);
 
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
     }
 
     @Test
     @DisplayName("User create by random credentials")
     public void userRandomCreate(){
-        ValidatableResponse randomUser = userClient.createUser(
-                User.getRandomUser());
-        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+        ValidatableResponse randomUser = userClient.createUser(User.getRandomUser());
+
+        ValidatableResponse token = userClient.loginUser(Login.from(user));
+        accessToken = StringUtils.substringAfter(token.extract().path("accessToken"), " ");
 
         randomUser
                 .assertThat()
@@ -44,12 +48,6 @@ public class UserCreateTest extends Constants {
     @Test
     @DisplayName("User create by valid credentials")
     public void userCreateByValidCredentials(){
-        user = User.getRandomUser();
-        userClient.createUser(user);
-
-        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
-
         ValidatableResponse response = userClient.createUser(user);
         response
                 .assertThat()
@@ -94,5 +92,12 @@ public class UserCreateTest extends Constants {
                 .body("success", equalTo(false))
                 .body("message", equalTo("Email, password and name are required fields"))
                 .log().all();
+    }
+
+    @After
+    public void tearDown(){
+        if (accessToken != null) {
+            userClient.deleteUser(accessToken);
+        }
     }
 }

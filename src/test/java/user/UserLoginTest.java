@@ -1,11 +1,11 @@
 package user;
 
 import client.UserClient;
-import com.github.javafaker.Code;
 import emity.*;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
 import org.junit.Test;
 import utils.Constants;
 
@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class UserLoginTest extends Constants {
 
     UserClient userClient = new UserClient();
+    private String accessToken;
 
     @Test
     @DisplayName("User logout by valid credentials")
@@ -38,6 +39,8 @@ public class UserLoginTest extends Constants {
     @DisplayName("User login is empty email")
     public void userLoginByEmptyEmail(){
         ValidatableResponse response = userClient.loginUser(new Login(null,PASSWORD_TEST));
+
+        accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
                 .assertThat()
                 .statusCode(401)
@@ -50,11 +53,20 @@ public class UserLoginTest extends Constants {
     @DisplayName("User login is empty password")
     public void userLoginByEmptyPassword(){
         ValidatableResponse response = userClient.loginUser(new Login(EMAIL_TEST,null));
+
+        accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
                 .assertThat()
                 .statusCode(401)
                 .log().all()
                 .body("success", equalTo(false))
                 .log().all();
+    }
+
+    @After
+    public void tearDown(){
+        if (accessToken != null) {
+            userClient.deleteUser(accessToken);
+        }
     }
 }

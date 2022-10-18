@@ -71,8 +71,6 @@ public class CreateOrderTest extends Constants {
     @Test
     @DisplayName("Create order by authorization")
     public void createOrderByAuth(){
-
-
         ValidatableResponse response = orderClient.getOrderResponseLogin(
                 new Order(List.of(validHashOne, validHashTwo)), accessToken);
         response
