@@ -7,14 +7,11 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import utils.Constants;
-
 import static org.hamcrest.Matchers.equalTo;
 
-public class UserUpdateTest extends Constants {
+public class UserUpdateTest{
 
     UserClient userClient = new UserClient();
-    private final String expectedNewEmail = "updatetestemail23033@yandex.ru";
 
     @Test
     @DisplayName("Update user by authorization")
