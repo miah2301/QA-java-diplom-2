@@ -20,19 +20,20 @@ public class UserCreateTest extends Constants {
     private String accessToken;
     private User user;
 
-    @Before
+/*    @Before
     public void setUp(){
         user = User.getRandomUser();
         userClient.createUser(user);
 
         ValidatableResponse getToken = userClient.loginUser(Login.from(user));
         accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
-    }
+    }*/
 
     @Test
     @DisplayName("User create by random credentials")
     public void userRandomCreate(){
-        ValidatableResponse randomUser = userClient.createUser(User.getRandomUser());
+        user = User.getRandomUser();
+        ValidatableResponse randomUser = userClient.createUser(user);
 
         ValidatableResponse token = userClient.loginUser(Login.from(user));
         accessToken = StringUtils.substringAfter(token.extract().path("accessToken"), " ");
@@ -41,28 +42,33 @@ public class UserCreateTest extends Constants {
                 .assertThat()
                 .statusCode(200)
                 .body("success", equalTo(true));
-
-        userClient.deleteUser(accessToken);
     }
 
     @Test
     @DisplayName("User create by valid credentials")
     public void userCreateByValidCredentials(){
+        user = User.getRandomUser();
+        userClient.createUser(user);
+
+        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
+        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
+
         ValidatableResponse response = userClient.createUser(user);
+        // ТУТ НАДО ДОДЕЛАТЬ
         response
                 .assertThat()
                 .statusCode(403)
                 .body("success", equalTo(false))
                 .body("message", equalTo("User already exists"))
                 .log().all();
-
-        userClient.deleteUser(accessToken);
     }
 
     @Test
     @DisplayName("User create is empty email")
     public void userCreateIsEmptyEmail(){
         ValidatableResponse response = userClient.createUser(new User(null,PASSWORD_TEST,NAME_TEST));
+
+        accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
                 .assertThat()
                 .statusCode(403)
@@ -74,6 +80,8 @@ public class UserCreateTest extends Constants {
     @DisplayName("User create is empty password")
     public void userCreateIsEmptyPassword(){
         ValidatableResponse response = userClient.createUser(new User(EMAIL_TEST,null,NAME_TEST));
+
+        accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
                 .assertThat()
                 .statusCode(403)
@@ -86,6 +94,8 @@ public class UserCreateTest extends Constants {
     @DisplayName("User create is empty name")
     public void userCreateIsEmptyName(){
         ValidatableResponse response = userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,null));
+
+        accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
                 .assertThat()
                 .statusCode(403)

@@ -14,7 +14,6 @@ import static org.hamcrest.Matchers.equalTo;
 public class UserLoginTest extends Constants {
 
     UserClient userClient = new UserClient();
-    private String accessToken;
 
     @Test
     @DisplayName("User logout by valid credentials")
@@ -39,8 +38,6 @@ public class UserLoginTest extends Constants {
     @DisplayName("User login is empty email")
     public void userLoginByEmptyEmail(){
         ValidatableResponse response = userClient.loginUser(new Login(null,PASSWORD_TEST));
-
-        accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
                 .assertThat()
                 .statusCode(401)
@@ -53,20 +50,11 @@ public class UserLoginTest extends Constants {
     @DisplayName("User login is empty password")
     public void userLoginByEmptyPassword(){
         ValidatableResponse response = userClient.loginUser(new Login(EMAIL_TEST,null));
-
-        accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
                 .assertThat()
                 .statusCode(401)
                 .log().all()
                 .body("success", equalTo(false))
                 .log().all();
-    }
-
-    @After
-    public void tearDown(){
-        if (accessToken != null) {
-            userClient.deleteUser(accessToken);
-        }
     }
 }
