@@ -8,26 +8,15 @@ import io.restassured.response.ValidatableResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import utils.Constants;
 
 import static org.hamcrest.Matchers.equalTo;
 
 public class UserCreateTest extends Constants {
-
     UserClient userClient = new UserClient();
     private String accessToken;
     private User user;
-
-/*    @Before
-    public void setUp(){
-        user = User.getRandomUser();
-        userClient.createUser(user);
-
-        ValidatableResponse getToken = userClient.loginUser(Login.from(user));
-        accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
-    }*/
 
     @Test
     @DisplayName("User create by random credentials")

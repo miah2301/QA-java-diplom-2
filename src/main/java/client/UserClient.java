@@ -1,9 +1,7 @@
 package client;
 
-import config.*;
 import emity.*;
 import utils.Constants;
-import org.apache.commons.lang3.StringUtils;
 
 import io.restassured.response.ValidatableResponse;
 
@@ -61,11 +59,6 @@ public class UserClient extends Constants {
     }
 
     public void cleanUpdaterUser(String accessToken){
-/*        String expectedNewEmail = "updatetestemail23033@yandex.ru";
-
-        ValidatableResponse getToken = loginUser(new Login(expectedNewEmail,PASSWORD_TEST));
-        String accessToken = getToken.extract().path("accessToken");*/
-
         given()
                 .spec(getBaseSpec())
                 .auth().oauth2(accessToken)

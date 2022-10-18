@@ -5,7 +5,6 @@ import emity.*;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
 import org.junit.Test;
 import utils.Constants;
 
@@ -23,7 +22,6 @@ public class UserLoginTest extends Constants {
 
         ValidatableResponse response = userClient.loginUser(Login.from(user));
         String accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
-
             response
                     .assertThat()
                      .statusCode(200)

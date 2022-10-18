@@ -2,7 +2,6 @@ package client;
 
 import emity.*;
 import io.restassured.response.ValidatableResponse;
-import org.apache.commons.lang3.StringUtils;
 import utils.Constants;
 
 import static io.restassured.RestAssured.given;
