@@ -39,26 +39,19 @@ public class UserClient extends Constants {
                 .log().all();
     }
 
-    public ValidatableResponse updateUserLogin(){
-        String newEmail = "updatetestemail23033@yandex.ru";
-
-        ValidatableResponse getToken = loginUser(new Login(EMAIL_TEST,PASSWORD_TEST));
-        String accessToken = getToken.extract().path("accessToken");
-
+    public ValidatableResponse updateUserLogin(String accessToken, String newEmail){
         User changeUser = new User(newEmail, PASSWORD_TEST, NAME_TEST);
         return given()
                 .spec(getBaseSpec())
-                .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
+                .auth().oauth2(accessToken)
                 .body(changeUser)
                 .patch(API_INFO)
                 .then()
                 .log().all();
     }
 
-    public ValidatableResponse updateUserLogout(){
-        String newEmail = "updatetestemail23033@yandex.ru";
-
-        User changeUser = new User(newEmail, PASSWORD_TEST, NAME_TEST);
+    public ValidatableResponse updateUserLogout(String updateEmail){
+        User changeUser = new User(updateEmail, PASSWORD_TEST, NAME_TEST);
         return given()
                 .spec(getBaseSpec())
                 .body(changeUser)
@@ -67,16 +60,18 @@ public class UserClient extends Constants {
                 .log().all();
     }
 
-    public void cleanUpdaterUser(){
-        String expectedNewEmail = "updatetestemail23033@yandex.ru";
+    public void cleanUpdaterUser(String accessToken){
+/*        String expectedNewEmail = "updatetestemail23033@yandex.ru";
 
         ValidatableResponse getToken = loginUser(new Login(expectedNewEmail,PASSWORD_TEST));
-        String accessToken = getToken.extract().path("accessToken");
+        String accessToken = getToken.extract().path("accessToken");*/
 
         given()
                 .spec(getBaseSpec())
-                .auth().oauth2(StringUtils.substringAfter(accessToken, " "))
+                .auth().oauth2(accessToken)
                 .when()
-                .delete(API_INFO);
+                .delete(API_INFO)
+                .then()
+                .log().all();
     }
 }
