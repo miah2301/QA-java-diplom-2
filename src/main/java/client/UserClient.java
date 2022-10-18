@@ -56,14 +56,4 @@ public class UserClient extends Constants {
                 .then()
                 .log().all();
     }
-
-    public void cleanUpdaterUser(String accessToken){
-        given()
-                .spec(getBaseSpec())
-                .auth().oauth2(accessToken)
-                .when()
-                .delete(API_INFO)
-                .then()
-                .log().all();
-    }
 }

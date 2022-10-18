@@ -32,7 +32,7 @@ public class UserUpdateTest extends Constants {
                 .body("user.email",equalTo(expectedNewEmail))
                 .log().all();
 
-        userClient.cleanUpdaterUser(accessToken);
+        userClient.deleteUser(accessToken);
     }
 
     @Test
