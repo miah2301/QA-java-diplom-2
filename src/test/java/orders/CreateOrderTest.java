@@ -11,15 +11,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import utils.Constants;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class CreateOrderTest extends Constants {
+public class CreateOrderTest {
     private final UserClient userClient = new UserClient();
     private final OrderClient orderClient = new OrderClient();
+    private static final String validHashOne = "61c0c5a71d1f82001bdaaa70";
+    private static final String validHashTwo = "61c0c5a71d1f82001bdaaa72";
     private String accessToken;
 
     @Before

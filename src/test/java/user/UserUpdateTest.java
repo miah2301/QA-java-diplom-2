@@ -25,11 +25,11 @@ public class UserUpdateTest extends Constants {
         ValidatableResponse getToken = userClient.loginUser(Login.from(user));
         String accessToken = StringUtils.substringAfter(getToken.extract().path("accessToken"), " ");
 
-        ValidatableResponse response = userClient.updateUserLogin(accessToken, expectedNewEmail);
+        ValidatableResponse response = userClient.updateUserLogin(accessToken, user);
         response
                 .assertThat()
                 .body("success", equalTo(true))
-                .body("user.email",equalTo(expectedNewEmail))
+                .body("user.email",equalTo(response.extract().path("user.email")))
                 .log().all();
 
         userClient.deleteUser(accessToken);
@@ -38,7 +38,8 @@ public class UserUpdateTest extends Constants {
     @Test
     @DisplayName("Update user without authorization")
     public void updateUserWithoutAuthorization() {
-        ValidatableResponse response = userClient.updateUserLogout(expectedNewEmail);
+
+        ValidatableResponse response = userClient.updateUserLogout(User.getRandomUser());
         response
                 .assertThat()
                 .statusCode(401)

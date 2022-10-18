@@ -5,19 +5,22 @@ import emity.*;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
-import utils.Constants;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class UserLoginTest extends Constants {
-
+public class UserLoginTest {
     UserClient userClient = new UserClient();
+    private User user;
 
+    @Before
+    public void setUp(){
+        user = User.getRandomUser();
+    }
     @Test
     @DisplayName("User logout by valid credentials")
     public void userLoginByValidCredentials(){
-        User user = User.getRandomUser();
         userClient.createUser(user);
 
         ValidatableResponse response = userClient.loginUser(Login.from(user));
@@ -35,7 +38,9 @@ public class UserLoginTest extends Constants {
     @Test
     @DisplayName("User login is empty email")
     public void userLoginByEmptyEmail(){
-        ValidatableResponse response = userClient.loginUser(new Login(null,PASSWORD_TEST));
+        user.setEmail(null);
+
+        ValidatableResponse response = userClient.loginUser(Login.from(user));
         response
                 .assertThat()
                 .statusCode(401)
@@ -47,7 +52,9 @@ public class UserLoginTest extends Constants {
     @Test
     @DisplayName("User login is empty password")
     public void userLoginByEmptyPassword(){
-        ValidatableResponse response = userClient.loginUser(new Login(EMAIL_TEST,null));
+        user.setPassword(null);
+
+        ValidatableResponse response = userClient.loginUser(Login.from(user));
         response
                 .assertThat()
                 .statusCode(401)

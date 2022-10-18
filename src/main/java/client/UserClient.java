@@ -36,22 +36,20 @@ public class UserClient extends Constants {
                 .log().all();
     }
 
-    public ValidatableResponse updateUserLogin(String accessToken, String newEmail){
-        User changeUser = new User(newEmail, PASSWORD_TEST, NAME_TEST);
+    public ValidatableResponse updateUserLogin(String accessToken, User user){
         return given()
                 .spec(getBaseSpec())
                 .auth().oauth2(accessToken)
-                .body(changeUser)
+                .body(user)
                 .patch(API_INFO)
                 .then()
                 .log().all();
     }
 
-    public ValidatableResponse updateUserLogout(String updateEmail){
-        User changeUser = new User(updateEmail, PASSWORD_TEST, NAME_TEST);
+    public ValidatableResponse updateUserLogout(User user){
         return given()
                 .spec(getBaseSpec())
-                .body(changeUser)
+                .body(user)
                 .patch(API_INFO)
                 .then()
                 .log().all();

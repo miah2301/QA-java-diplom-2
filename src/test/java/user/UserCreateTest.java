@@ -8,20 +8,24 @@ import io.restassured.response.ValidatableResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import utils.Constants;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class UserCreateTest extends Constants {
+public class UserCreateTest {
     UserClient userClient = new UserClient();
     private String accessToken;
     private User user;
 
+    @Before
+    public void setUp(){
+        user = User.getRandomUser();
+    }
+
     @Test
     @DisplayName("User create by random credentials")
     public void userRandomCreate(){
-        user = User.getRandomUser();
         ValidatableResponse randomUser = userClient.createUser(user);
 
         ValidatableResponse token = userClient.loginUser(Login.from(user));
@@ -36,7 +40,6 @@ public class UserCreateTest extends Constants {
     @Test
     @DisplayName("User create by valid credentials")
     public void userCreateByValidCredentials(){
-        user = User.getRandomUser();
         userClient.createUser(user);
 
         ValidatableResponse getToken = userClient.loginUser(Login.from(user));
@@ -54,7 +57,8 @@ public class UserCreateTest extends Constants {
     @Test
     @DisplayName("User create is empty email")
     public void userCreateIsEmptyEmail(){
-        ValidatableResponse response = userClient.createUser(new User(null,PASSWORD_TEST,NAME_TEST));
+        user.setEmail(null);
+        ValidatableResponse response = userClient.createUser(user);
 
         accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
@@ -67,7 +71,8 @@ public class UserCreateTest extends Constants {
     @Test
     @DisplayName("User create is empty password")
     public void userCreateIsEmptyPassword(){
-        ValidatableResponse response = userClient.createUser(new User(EMAIL_TEST,null,NAME_TEST));
+        user.setPassword(null);
+        ValidatableResponse response = userClient.createUser(user);
 
         accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
@@ -81,7 +86,8 @@ public class UserCreateTest extends Constants {
     @Test
     @DisplayName("User create is empty name")
     public void userCreateIsEmptyName(){
-        ValidatableResponse response = userClient.createUser(new User(EMAIL_TEST,PASSWORD_TEST,null));
+        user.setName(null);
+        ValidatableResponse response = userClient.createUser(user);
 
         accessToken = StringUtils.substringAfter(response.extract().path("accessToken"), " ");
         response
