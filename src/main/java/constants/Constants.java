@@ -1,6 +1,4 @@
-package utils;
-
-import config.Config;
+package constants;
 
 public class Constants {
     protected static final String API_CREATE_USER = "api/auth/register";

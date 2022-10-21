@@ -1,8 +1,7 @@
 package client;
 
-import config.Config;
 import emity.*;
-import utils.Constants;
+import constants.Constants;
 
 import io.restassured.response.ValidatableResponse;
 

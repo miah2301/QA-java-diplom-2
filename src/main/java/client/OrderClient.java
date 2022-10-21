@@ -2,7 +2,7 @@ package client;
 
 import emity.*;
 import io.restassured.response.ValidatableResponse;
-import utils.Constants;
+import constants.Constants;
 
 import static io.restassured.RestAssured.given;
 import static config.Config.getBaseSpec;
