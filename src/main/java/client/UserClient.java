@@ -1,10 +1,12 @@
 package client;
 
+import config.Config;
 import emity.*;
 import utils.Constants;
 
 import io.restassured.response.ValidatableResponse;
 
+import static config.Config.getBaseSpec;
 import static io.restassured.RestAssured.given;
 
 public class UserClient extends Constants {

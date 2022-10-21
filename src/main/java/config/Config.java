@@ -8,7 +8,7 @@ import static io.restassured.http.ContentType.JSON;
 public class Config {
     public static final String BASE_URL = "https://stellarburgers.nomoreparties.site/";
 
-    protected RequestSpecification getBaseSpec() {
+    public static RequestSpecification getBaseSpec() {
         return new RequestSpecBuilder()
                 .setBaseUri(BASE_URL)
                 .setContentType(JSON)

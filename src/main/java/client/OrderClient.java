@@ -5,6 +5,7 @@ import io.restassured.response.ValidatableResponse;
 import utils.Constants;
 
 import static io.restassured.RestAssured.given;
+import static config.Config.getBaseSpec;
 
 public class OrderClient extends Constants {
 
